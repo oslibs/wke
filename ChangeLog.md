@@ -1,4 +1,34 @@
-﻿#### 2015-11-24 23:51 修改 ChangeLog 更新日志的路径。
+﻿#### 2015-11-27 21:56 提交编译好的二进制文件。
+* 提交编译好的二进制文件。
+
+#### 2015-11-26 20:23 修正 wke 中 wkeSimpleStringT 拷贝宽字符串只拷一半的问题。
+* 之前 wke 中的 wkeSimpleStringT 有拷贝宽字符串只拷一半的问题，导致 wkeToTempStringW 不正常。
+
+#### 2015-11-26 10:26 增加 vs2010.bat 等批处理用于打开工程，避免找不到 nmake 的情况。
+* 在使用 vs2010 或 vs2013 编译时可能会出现找不到 namke 的情况，因此增加 vs2010.bat 等批处理，其会先设置环境变量再打开工程。
+
+#### 2015-11-26 10:07 修正 wkeBrowser 的 _WIN32_WINNT 导致找不到符号的问题。
+* 修正 wkeBrowser 的 _WIN32_WINNT 导致找不到 IDC_HAND 宏的问题，将其设置为最低 0x501（Windows XP）即可。
+
+#### 2015-11-25 22:28 增加基于 vs2008 工程文件 的 vs2005 工程文件。
+* 增加基于 vs2008 工程文件 的 vs2005 工程文件。
+* 修改 wkeBrowser 中 _WIN32_WINNT 定义，以支持 vs2005 编译。
+* 去掉 wkeBrowser 当中对 Direct3D 的引用，以支持 vs2005 编译。
+
+#### 2015-11-25 21:20 增加基于 BrentHuang 完成的 vs2013 工程文件。
+* 增加基于 BrentHuang（群里光 光）完成的 vs2013 工程文件，感谢 BrentHuang 的贡献。
+* 使用 BrentHuang 提供的修改过的几个源代码以支持 vs2013 中编译，我另外修改了几处以兼容 vs2008 和 vs2010。
+
+#### 2015-11-25 13:03 增加 wkeLoad/wkeLoadW 智能加载接口。
+* 增加 wkeLoad/wkeLoadW 智能加载接口，可分析出参数的类型是 URL 、HTML 或 文件路径，判断顺序如下：
+ - 若参数中明确指定了 https://、http://、file:///，则按 URL 加载。
+ - 若参数中包含 “<” 和 “>” 两个 HTML 中的特殊字符（同时这两个字符不可能是路径字符），按照 HTML 加载。
+ - 若参数中不包含 “:” 字符则按照相对路径处理，依次在当前工作目录、EXE所在目录查找将其补全为完整路径。
+ - 若完整路径指向的文件确实存在，则将其按照文件执行加载。
+ - 若以上判断全部失败，则当作 URL 加载。
+* 在 wkeBrowser 中将加载函数改为 wkeLoadW，可通过运行 wkeBrowser [加载参数] 直接进行测试。
+
+#### 2015-11-24 23:51 修改 ChangeLog 更新日志的路径。
 * 去掉 ChangeLog.txt。
 * 将 Document/history.md 移至根目录下 ChangeLog.md。
 

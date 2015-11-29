@@ -1,5 +1,10 @@
 
 #define WIN32_LEAN_AND_MEAN
+#if !defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x501)
+#undef _WIN32_WINNT
+#define _WIN32_WINNT 0x501
+#endif
+
 #include <windows.h>
 #include <windowsx.h>
 #include <stdio.h>
@@ -154,9 +159,9 @@ public:
         data->finalize = js_releaseObject;
 	}
 
-	void msgbox(const wchar_t* msg)
+	void msgbox(const wchar_t* msg, const wchar_t* title)
 	{
-		MessageBoxW(NULL, msg, NULL, MB_OK);
+		MessageBoxW(NULL, msg, title, MB_OK);
 	}
 
 protected:
@@ -208,7 +213,7 @@ protected:
 			if (argCount >= 2)
 				wcsncpy(title, jsToTempStringW(es, jsArg(es, 1)), 1024);
 
-			pthis->m_obj->msgbox(text);
+            pthis->m_obj->msgbox(text, title[0] ? title : NULL);
 			return jsInt(0);
 		}
 
@@ -291,7 +296,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     int argc = 0;
     LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
     if (argc > 1)
-        wkeLoadURLW(g_webView, argv[1]);
+        wkeLoadW(g_webView, argv[1]);
     else
         wkeLoadHTMLW(g_webView, L"<p style=\"background-color: #00FF00\">Testing</p><img id=\"webkit logo\" src=\"http://webkit.org/images/icon-gold.png\" alt=\"Face\"><div style=\"border: solid blue; background: white;\" contenteditable=\"true\">div with blue border</div><ul><li>foo<li>bar<li>baz</ul>");
     LocalFree(argv);
